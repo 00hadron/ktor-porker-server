@@ -2,6 +2,7 @@ package ru.hadron
 
 import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.defaultheaders.*
@@ -9,6 +10,7 @@ import io.ktor.server.routing.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.hadron.data.checkPasswordForEmail
 import ru.hadron.data.collections.User
 import ru.hadron.data.registerUser
 import ru.hadron.routes.registerRoute
@@ -36,4 +38,17 @@ fun Application.module(testing: Boolean = false) {
 //            )
 //        )
 //    }
+}
+
+private fun AuthenticationConfig.configureAuth() {
+    basic {
+        realm = "Porker Server"
+        validate {credentials ->
+            val email = credentials.name
+            val password  = credentials.password
+            if (checkPasswordForEmail(email, password)) {
+                UserIdPrincipal(email)
+            } else null
+        }
+    }
 }
