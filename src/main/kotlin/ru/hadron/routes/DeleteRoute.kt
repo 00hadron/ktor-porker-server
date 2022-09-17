@@ -27,7 +27,7 @@ fun Route.deleteRoute() {
                if (deleteUser(user.email)) {
                    call.respond(OK, SimpleResponse(true, "account deleted"))
                } else {
-                   call.respond(Conflict)
+                   call.respond(Conflict, SimpleResponse(false, "your have no permissions to delete this account"))
                }
            }
        }
