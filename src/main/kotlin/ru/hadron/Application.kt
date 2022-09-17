@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import ru.hadron.data.checkPasswordForEmail
 import ru.hadron.data.collections.User
 import ru.hadron.data.registerUser
+import ru.hadron.routes.deleteRoute
 import ru.hadron.routes.registerRoute
 
 fun main(args: Array<String>): Unit =
@@ -24,11 +25,16 @@ fun Application.module(testing: Boolean = false) {
     install(CallLogging)
     install(Routing) {
         registerRoute()
+        deleteRoute()
     }
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
         }
+    }
+
+    install(Authentication) {
+        configureAuth()
     }
 //    CoroutineScope(Dispatchers.IO).launch {
 //        registerUser(

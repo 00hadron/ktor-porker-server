@@ -21,3 +21,12 @@ suspend fun checkPasswordForEmail(email: String, passwordToCheck: String): Boole
     val actualPassword = users.findOne(User::email eq email)?.password ?: return false
     return actualPassword == passwordToCheck
 }
+
+suspend fun deleteUser(email: String): Boolean {
+    val userExist = checkIfUserExist(email)
+    return if (userExist) {
+        users.deleteOne(User::email eq email).wasAcknowledged()
+    } else {
+        false
+    }
+}
